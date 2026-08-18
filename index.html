@@ -1143,7 +1143,14 @@ async function submitOrder(){
     await fetch('https://script.google.com/macros/s/AKfycbw3g3LJ-4kDSwO-07PbbUKmFnbyitOoeovxhnWPxffhdNIods7t0tCBHPvatlV7ipYOkQ/exec',{
       method:'POST', mode:'no-cors',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name,phone,address,notes,item:'طقم الفضة الإيطالي',price:499})
+      body:JSON.stringify({
+        action:'new_order',
+        name, phone, address, notes,
+        item:'طقم الفضة الإيطالي',
+        price:499,
+        anklet_added:'لا',
+        total:499
+      })
     });
   } catch(e){}
 
@@ -1166,7 +1173,15 @@ async function addAnklet(){
     await fetch('https://script.google.com/macros/s/AKfycbw3g3LJ-4kDSwO-07PbbUKmFnbyitOoeovxhnWPxffhdNIods7t0tCBHPvatlV7ipYOkQ/exec',{
       method:'POST', mode:'no-cors',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(Object.assign({}, orderData, {addon:'انسيال فضة', addon_price:150, total:649}))
+      body:JSON.stringify({
+        action:'add_addon',
+        name: orderData.name,
+        phone: orderData.phone,
+        addon:'انسيال فضة',
+        addon_price:150,
+        total:649,
+        anklet_added:'نعم'
+      })
     });
   } catch(e){}
 }

@@ -545,6 +545,29 @@ body {
 .fgroup input:focus { border-color: var(--gold2); background: rgba(184,137,42,.07); }
 .fgroup input::placeholder { color: #444; }
 
+.fgroup select {
+  width: 100%;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 14px;
+  padding: 15px 18px;
+  color: var(--white);
+  font-family: 'Tajawal', sans-serif;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color .25s, background .25s;
+  direction: rtl;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E4B84A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 16px center;
+  background-size: 18px;
+}
+.fgroup select:focus { border-color: var(--gold2); background-color: rgba(184,137,42,.07); }
+.fgroup select option { background: #0A0015; color: var(--white); }
+
 .btn-submit {
   width: 100%;
   background: linear-gradient(135deg, var(--gold), var(--gold2), var(--gold3), var(--gold2), var(--gold));
@@ -1050,6 +1073,15 @@ footer {
           <input type="text" id="f-address" placeholder="مثال: القاهرة — مدينة نصر — شارع...">
         </div>
         <div class="fgroup">
+          <label>💍 مقاس الخاتم</label>
+          <select id="f-ring-size">
+            <option value="" disabled selected>اختار المقاس</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+          </select>
+        </div>
+        <div class="fgroup">
           <label>💌 الرسالة على الكارت (اختياري — لكنها بتفرق 😢)</label>
           <input type="text" id="f-notes" placeholder='مثال: "لأجمل إنسانة في حياتي — بحبك يا مريم"'>
         </div>
@@ -1145,15 +1177,17 @@ footer {
 let orderData = null;
 
 async function submitOrder(){
-  const name    = document.getElementById('f-name').value.trim();
-  const phone   = document.getElementById('f-phone').value.trim();
-  const address = document.getElementById('f-address').value.trim();
-  const notes   = document.getElementById('f-notes').value.trim();
+  const name      = document.getElementById('f-name').value.trim();
+  const phone     = document.getElementById('f-phone').value.trim();
+  const address   = document.getElementById('f-address').value.trim();
+  const ringSize  = document.getElementById('f-ring-size').value;
+  const notes     = document.getElementById('f-notes').value.trim();
 
   if(!name||!phone||!address){alert('من فضلك اكتب الاسم ورقم الموبايل والعنوان');return;}
   if(!/^01[0-9]{9}$/.test(phone)){alert('رقم الموبايل غلط — لازم يبدأ بـ 01 ويكون 11 رقم');return;}
+  if(!ringSize){alert('من فضلك اختار مقاس الخاتم');return;}
 
-  orderData = {name, phone, address, notes};
+  orderData = {name, phone, address, notes, ringSize};
 
   document.getElementById('f-form').style.display='none';
   document.getElementById('f-loading').style.display='block';
@@ -1165,6 +1199,7 @@ async function submitOrder(){
       body:JSON.stringify({
         action:'new_order',
         name, phone, address, notes,
+        ring_size: ringSize,
         item:'طقم الفضة الإيطالي',
         price:499,
         anklet_added:'لا',

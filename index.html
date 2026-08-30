@@ -1248,9 +1248,14 @@ async function submitOrder(){
   document.getElementById('f-loading').style.display='none';
   document.getElementById('f-success').style.display='block';
 
-  // Meta Pixel: track the lead / conversion event
+  // Meta Pixel: track the lead AND the purchase/conversion event
   try {
     fbq('track', 'Lead', {
+      content_name: 'طقم الفضة الإيطالي',
+      value: 499,
+      currency: 'EGP'
+    });
+    fbq('track', 'Purchase', {
       content_name: 'طقم الفضة الإيطالي',
       value: 499,
       currency: 'EGP'
